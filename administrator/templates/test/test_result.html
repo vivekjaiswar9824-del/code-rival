@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Test Result - {{ certification.course.title }}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .result-card {
+      border: 1px solid #dee2e6;
+      border-radius: 0.75rem;
+      transition: all 0.2s ease;
+      background-color: #fff;
+      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+
+    .score-circle {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: bold;
+      color: white;
+      margin: 0 auto;
+    }
+
+    .score-passed {
+      background: linear-gradient(135deg, #28a745, #20c997);
+    }
+
+    .score-failed {
+      background: linear-gradient(135deg, #dc3545, #fd7e14);
+    }
+
+    .metric-card {
+      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+      border: none;
+      border-radius: 0.5rem;
+    }
+
+    .question-result {
+      border-left: 4px solid #dee2e6;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 0.25rem;
+    }
+
+    .question-correct {
+      border-left-color: #28a745;
+      background-color: #f8fff9;
+    }
+
+    .question-incorrect {
+      border-left-color: #dc3545;
+      background-color: #fff8f8;
+    }
+
+    .question-unanswered {
+      border-left-color: #6c757d;
+      background-color: #f8f9fa;
+    }
+
+    .answer-option {
+      padding: 0.5rem;
+      border-radius: 0.25rem;
+      margin: 0.25rem 0;
+    }
+
+    .answer-correct {
+      background-color: #d4edda;
+      border: 1px solid #c3e6cb;
+      color: #155724;
+    }
+
+    .answer-incorrect {
+      background-color: #f8d7da;
+      border: 1px solid #f5c6cb;
+      color: #721c24;
+    }
+
+    .answer-selected {
+      background-color: #fff3cd;
+      border: 1px solid #ffeaa7;
+      color: #856404;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container mt-4">
+    <!-- Main Result Card -->
+    <div class="card result-card shadow-lg">
+      <div class="card-header {% if certification.status == 'Passed' %}bg-success{% else %}bg-danger{% endif %} text-white">
+        <div class="row align-items-center">
+          <div class="col-md-8">
+            <h4 class="mb-2"><i class="fas fa-certificate me-2"></i>Test Result</h4>
+            <h6 class="mb-0">{{ certification.course.title }} - {{ certification.level }} Level</h6>
+          </div>
+          <div class="col-md-4 text-end">
+            <div class="score-circle {% if certification.status == 'Passed' %}score-passed{% else %}score-failed{% endif %}">
+              {{ certification.score }}%
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card-body">
+        <!-- Status Badge -->
+        <div class="text-center mb-4">
+          {% if certification.status == "Passed" %}
+            <span class="badge bg-success fs-5 px-4 py-2">
+              <i class="fas fa-check-circle me-2"></i>{{ certification.status }}
+            </span>
+          {% else %}
+            <span class="badge bg-danger fs-5 px-4 py-2">
+              <i class="fas fa-times-circle me-2"></i>{{ certification.status }}
+            </span>
+          {% endif %}
+        </div>
+
+        <!-- Test Summary -->
+        {% if show_details and test_results %}
+        <div class="row mb-4">
+          <div class="col-md-3">
+            <div class="card metric-card text-center">
+              <div class="card-body">
+                <h5 class="text-primary">{{ test_results.total_questions }}</h5>
+                <small class="text-muted">Total Questions</small>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card metric-card text-center">
+              <div class="card-body">
+                <h5 class="text-success">{{ test_results.correct_answers }}</h5>
+                <small class="text-muted">Correct Answers</small>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card metric-card text-center">
+              <div class="card-body">
+                <h5 class="text-warning">{{ test_results.answered_questions }}</h5>
+                <small class="text-muted">Answered</small>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card metric-card text-center">
+              <div class="card-body">
+                <h5 class="text-info">{{ test_results.accuracy }}%</h5>
+                <small class="text-muted">Accuracy</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Detailed Question Results -->
+        <div class="mt-4">
+          <h5 class="mb-3"><i class="fas fa-list-ul me-2"></i>Question Details</h5>
+          {% for result in test_results.question_results %}
+          <div class="question-result {% if result.is_correct %}question-correct{% elif result.selected %}question-incorrect{% else %}question-unanswered{% endif %}">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <h6 class="mb-1">Question {{ forloop.counter }}</h6>
+              {% if result.is_correct %}
+                <span class="badge bg-success"><i class="fas fa-check"></i> Correct</span>
+              {% elif result.selected %}
+                <span class="badge bg-danger"><i class="fas fa-times"></i> Incorrect</span>
+              {% else %}
+                <span class="badge bg-secondary"><i class="fas fa-minus"></i> Unanswered</span>
+              {% endif %}
+            </div>
+            <p class="mb-2">{{ result.question_text }}</p>
+            
+            <div class="row">
+              <div class="col-md-6">
+                <div class="answer-option {% if result.correct_answer == 'A' %}answer-correct{% elif result.selected == 'A' %}answer-selected{% endif %}">
+                  <strong>A:</strong> {{ result.option_a }}
+                  {% if result.correct_answer == 'A' %}<i class="fas fa-check text-success ms-2"></i>{% endif %}
+                </div>
+                <div class="answer-option {% if result.correct_answer == 'B' %}answer-correct{% elif result.selected == 'B' %}answer-selected{% endif %}">
+                  <strong>B:</strong> {{ result.option_b }}
+                  {% if result.correct_answer == 'B' %}<i class="fas fa-check text-success ms-2"></i>{% endif %}
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="answer-option {% if result.correct_answer == 'C' %}answer-correct{% elif result.selected == 'C' %}answer-selected{% endif %}">
+                  <strong>C:</strong> {{ result.option_c }}
+                  {% if result.correct_answer == 'C' %}<i class="fas fa-check text-success ms-2"></i>{% endif %}
+                </div>
+                <div class="answer-option {% if result.correct_answer == 'D' %}answer-correct{% elif result.selected == 'D' %}answer-selected{% endif %}">
+                  <strong>D:</strong> {{ result.option_d }}
+                  {% if result.correct_answer == 'D' %}<i class="fas fa-check text-success ms-2"></i>{% endif %}
+                </div>
+              </div>
+            </div>
+            
+            {% if result.selected and not result.is_correct %}
+            <div class="mt-2">
+              <small class="text-danger">
+                <i class="fas fa-info-circle me-1"></i>
+                Your answer: {{ result.selected }} | Correct answer: {{ result.correct_answer }}
+              </small>
+            </div>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Performance Trends -->
+        {% if avg_score is not None %}
+        <div class="mt-4 p-3 bg-light rounded">
+          <h6><i class="fas fa-trending-up me-2"></i>Performance Trends</h6>
+          <div class="row">
+            <div class="col-md-6">
+              <p class="mb-1"><strong>Average Score:</strong> {{ avg_score|floatformat:1 }}%</p>
+              <p class="mb-1"><strong>Total Attempts:</strong> {{ total_attempts }}</p>
+            </div>
+            <div class="col-md-6">
+              {% if improvement is not None %}
+                <p class="mb-1">
+                  <strong>Improvement:</strong> 
+                  <span class="badge {% if improvement > 0 %}bg-success{% elif improvement < 0 %}bg-danger{% else %}bg-secondary{% endif %}">
+                    {% if improvement > 0 %}+{% endif %}{{ improvement|floatformat:1 }}%
+                  </span>
+                </p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- Certificate Info -->
+        <div class="mt-4 p-3 bg-light rounded">
+          <h6><i class="fas fa-info-circle me-2"></i>Certificate Information</h6>
+          <p class="mb-1"><strong>Issued At:</strong> {{ certification.issued_at|date:"F j, Y, g:i a" }}</p>
+          <p class="mb-1"><strong>Course:</strong> {{ certification.course.title }}</p>
+          <p class="mb-0"><strong>Level:</strong> {{ certification.level }}</p>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="mt-4 text-center">
+          <a href="{% url 'developer_dashboard' %}" class="btn btn-outline-primary me-2">
+            <i class="fas fa-home me-1"></i>Back to Dashboard
+          </a>
+          <a href="{% url 'test-history' %}" class="btn btn-outline-info me-2">
+            <i class="fas fa-chart-line me-1"></i>View History
+          </a>
+          <a href="{% url 'attempt-test' %}" class="btn btn-outline-success me-2">
+            <i class="fas fa-redo me-1"></i>Take Another Test
+          </a>
+          {% if certification.status == 'Passed' %}
+            {% for certificate in certificates %}
+              {% if certificate.course.id == certification.course.id and certificate.level == certification.level %}
+                {% if certificate.certificate_file and certificate.certificate_file != '' %}
+                <div class="d-flex gap-2 justify-content-center mb-2">
+                  <!-- <a href="{% url 'view_certificate' certificate.id %}" class="btn btn-outline-success" target="_blank">
+                    <i class="fas fa-eye me-1"></i>View Certificate
+                  </a>
+                  <a href="{% url 'download_certificate' certificate.id %}" class="btn btn-success">
+                    <i class="fas fa-download me-1"></i>Download Certificate
+                  </a> -->
+                </div>
+                {% else %}
+                <button class="btn btn-outline-success" disabled>
+                  <i class="fas fa-clock me-1"></i>Certificate Generating...
+                </button>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+            <a href="{% url 'developer_certificates' %}" class="btn btn-outline-secondary ms-2">
+              <i class="fas fa-certificate me-1"></i>View All Certificates
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

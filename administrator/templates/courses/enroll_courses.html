@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Developer Dashboard | CodeRivals</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Bootstrap + FontAwesome -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .sidebar {
+            width: 230px;
+            min-height: 100vh;
+            background: #fff;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 1.5rem 1rem;
+        }
+
+        .card-style {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+            height: fit-content;
+            width: 400px;
+            margin-top: 20px;
+        }
+
+        .card-style:hover {
+            transform: scale(1.02);
+        }
+
+        .section-title {
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .sidebar a {
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .sidebar a.active,
+        .sidebar a:hover {
+            background-color: #e9f2ff;
+            color: #0d6efd;
+        }
+
+        .content {
+            margin-left: 230px;
+            padding: 2rem;
+        }
+
+        .card-box {
+            border: none;
+            border-radius: 12px;
+            transition: 0.3s;
+            box-shadow: 0 0 0 transparent;
+        }
+
+        .card-box:hover {
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.07);
+            transform: translateY(-2px);
+        }
+
+        .card-icon {
+            font-size: 24px;
+            padding: 12px;
+            border-radius: 8px;
+            color: white;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .bg-primary-light {
+            background: #e0ebff;
+            color: #0d6efd;
+        }
+
+        .bg-success-light {
+            background: #e7f7ef;
+            color: #198754;
+        }
+
+        .bg-warning-light {
+            background: #fff3cd;
+            color: #ffc107;
+        }
+
+        .topbar {
+            background-color: #fff;
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            position: fixed;
+            top: 0;
+            left: 230px;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .topbar .profile-btn {
+            border: none;
+            background: transparent;
+            color: #333;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                position: static;
+                min-height: auto;
+                box-shadow: none;
+            }
+
+            .content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+
+            .topbar {
+                left: 0;
+            }
+        }
+
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .card-box {
+            border: none;
+            border-radius: 12px;
+            transition: 0.3s;
+            box-shadow: 0 0 0 transparent;
+        }
+
+        .card-box:hover {
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.07);
+            transform: translateY(-2px);
+        }
+
+        .card-icon {
+            font-size: 24px;
+            padding: 12px;
+            border-radius: 8px;
+            color: white;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .bg-primary-light {
+            background: #e0ebff;
+            color: #0d6efd;
+        }
+
+        .bg-success-light {
+            background: #e7f7ef;
+            color: #198754;
+        }
+
+        .bg-warning-light {
+            background: #fff3cd;
+            color: #ffc107;
+        }
+
+        .sidebar {
+            width: 230px;
+            min-height: 100vh;
+            background: #fff;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 1.5rem 1rem;
+            transition: all 0.3s ease;
+            z-index: 999;
+        }
+
+        .sidebar.collapsed {
+            width: 60px;
+        }
+
+        .sidebar h5 {
+            transition: opacity 0.3s;
+        }
+
+        .sidebar.collapsed h5 {
+            opacity: 0;
+        }
+
+        .sidebar a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            color: #333;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .sidebar a i {
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .sidebar a span {
+            transition: opacity 0.3s;
+        }
+
+        .sidebar.collapsed a span {
+            opacity: 0;
+        }
+
+        .sidebar a.active,
+        .sidebar a:hover {
+            background-color: #e9f2ff;
+            color: #0d6efd;
+        }
+
+        .content {
+            margin-left: 230px;
+            padding: 2rem;
+            transition: margin-left 0.3s ease;
+        }
+
+        .collapsed~.content {
+            margin-left: 60px;
+        }
+
+        .topbar {
+            background-color: #fff;
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            position: fixed;
+            top: 0;
+            left: 230px;
+            right: 0;
+            z-index: 1000;
+            transition: left 0.3s ease;
+        }
+
+        .collapsed~.topbar {
+            left: 60px;
+        }
+
+
+
+        .topbar .profile-btn {
+            border: none;
+            background: transparent;
+            color: #333;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                position: static;
+                min-height: auto;
+                box-shadow: none;
+            }
+
+            .sidebar.collapsed {
+                width: 100%;
+            }
+
+            .content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+
+            .topbar {
+                left: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <h5 class="text-primary fw-bold mb-4">CodeRivals</h5>
+        <a href="{% url 'developer_dashboard'%}" class="active"><i class="fa fa-gauge"></i><span>Dashboard</span></a>
+        <a href="{% url 'enroll_courses'%}"><i class="fa fa-book"></i><span>Courses</span></a>
+        <a href="{% url 'attempt-test'%}"><i class="fa fa-file-lines"></i><span>Tests</span></a>
+        <a href="{% url 'test-history'%}"><i class="fa fa-chart-line"></i><span>Test History</span></a>
+        <a href="{% url 'developer_certificates'%}"><i class="fa fa-certificate"></i><span>Certificates</span></a>
+       
+    </div>
+
+    <!-- Topbar -->
+    <div class="topbar d-flex justify-content-between align-items-center" id="topbar">
+        <div class="d-flex align-items-center gap-3">
+            <button class="btn btn-sm btn-outline-primary" id="toggleSidebarBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <h5 class="mb-0" id="welcomeText">Welcome, Developer</h5>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+            <a href="#" class="btn btn-outline-primary btn-sm"><i class="fa fa-bell"></i></a>
+            <div class="dropdown">
+                <button class="profile-btn dropdown-toggle" type="button" id="profileDropdown" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    <i class="fas fa-user-circle fs-5"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#viewProfileModal"><i
+                                class="fas fa-user me-2"></i>View Profile</a></li>
+                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#resetPasswordModal"><i
+                                class="fas fa-key me-2"></i>Reset Password</a></li>
+                    <li>
+                        <hr class="dropdown-divider" />
+                    </li>
+                    <li><a class="dropdown-item text-danger" href="/logout"><i
+                                class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content mt-5 pt-4">
+        <div class="container py-5">
+            <div class="row">
+                {% for course in courses %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card card-style">
+                        <div class="card-body  ">
+                            <h5 class="card-title">{{ course.title }}</h5>
+                            <p class="card-text">{{ course.description }}</p>
+                            {% if course.id in enrolled_courses %}
+                            <button class="btn btn-success" disabled>Already Enrolled</button>
+                            {% else %}
+                            <form method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="course_id" value="{{ course.id }}">
+                                <button type="submit" class="btn btn-primary">Enroll</button>
+                            </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!-- View Profile Modal -->
+    <div class="modal fade" id="viewProfileModal" tabindex="-1" aria-labelledby="viewProfileModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content rounded-4 px-3 pt-3 pb-2">
+                <div class="modal-header border-0 py-2">
+                    <h5 class="modal-title">View Profile</h5>
+                    <button class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-3">
+                        <img src="#" class="rounded-circle mb-2" width="80" height="80">
+                        <h6>Jaiswar Vivek</h6>
+                        <p class="text-muted small">vivek@gmail.com</p>
+                    </div>
+                    <form>
+                        <div class="row mb-2">
+                            <div class="col-md-6">
+                                <label class="form-label small">First Name</label>
+                                <input class="form-control form-control-sm" value="Amélie" disabled>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small">Last Name</label>
+                                <input class="form-control form-control-sm" value="Laurent" disabled>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label small">Email Address</label>
+                            <input class="form-control form-control-sm" value="amelie@untitledui.com" disabled>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label small">Phone Number</label>
+                            <input class="form-control form-control-sm" value="+91 9876543210" disabled>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label small">Address</label>
+                            <textarea class="form-control form-control-sm" rows="1"
+                                disabled>123, Sunset Boulevard, Paris</textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-dark btn-sm" data-bs-target="#updateModal" data-bs-toggle="modal"
+                        data-bs-dismiss="modal">Update Profile</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Profile Modal -->
+    <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content rounded-4 px-3 pt-3 pb-2">
+                <div class="modal-header border-0 py-2">
+                    <h5 class="modal-title">Update Profile</h5>
+                    <button class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-3">
+                        <img src="#" class="rounded-circle mb-2" width="80" height="80">
+                        <button class="btn btn-sm btn-outline-secondary">Change Photo</button>
+                        <h6>Jaiswar Vivek</h6>
+                        <p class="text-muted small">vivek@gmail.com</p>
+                    </div>
+                    <form>
+                        <div class="row mb-2">
+                            <div class="col-md-6">
+                                <label class="form-label small">First Name</label>
+                                <input class="form-control form-control-sm" value="Amélie">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small">Last Name</label>
+                                <input class="form-control form-control-sm" value="Laurent">
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label small">Email Address</label>
+                            <input class="form-control form-control-sm" value="amelie@untitledui.com">
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label small">Phone Number</label>
+                            <input class="form-control form-control-sm" value="+91 9876543210">
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label small">Address</label>
+                            <textarea class="form-control form-control-sm"
+                                rows="1">123, Sunset Boulevard, Paris</textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button class="btn btn-outline-danger btn-sm">Delete Profile</button>
+                    <div>
+                        <button class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
+                        <button class="btn btn-dark btn-sm">Save Changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reset Password Modal -->
+    <div class="modal fade" id="resetPasswordModal" tabindex="-1" aria-labelledby="resetPasswordLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-sm rounded-3">
+                <div class="modal-body px-4 py-5 text-center">
+                    <div class="mb-3">
+                        <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center"
+                            style="width: 60px; height: 60px;">
+                            <i class="fas fa-key text-white fs-4"></i>
+                        </div>
+                    </div>
+                    <h4 class="fw-semibold mb-4 text-primary">Reset Password</h4>
+                    <form>
+                        <div class="form-group mb-3 text-start">
+                            <input type="password" class="form-control" placeholder="New Password">
+                        </div>
+                        <div class="form-group mb-4 text-start">
+                            <input type="password" class="form-control" placeholder="Confirm New Password">
+                        </div>
+                        <div class="d-flex justify-content-center gap-3">
+                            <button type="submit" class="btn btn-primary px-4">Continue</button>
+                            <button type="button" class="btn btn-outline-secondary px-4"
+                                data-bs-dismiss="modal">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Bootstrap JS + Toggle Script -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const topbar = document.getElementById('topbar');
+        const content = document.querySelector('.content');
+        const toggleBtn = document.getElementById('toggleSidebarBtn');
+        const welcomeText = document.getElementById('welcomeText');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('collapsed');
+            topbar.classList.toggle('collapsed');
+        }
+
+        toggleBtn.addEventListener('click', toggleSidebar);
+        welcomeText.addEventListener('click', toggleSidebar);
+    </script>
+</body>
+
+</html>

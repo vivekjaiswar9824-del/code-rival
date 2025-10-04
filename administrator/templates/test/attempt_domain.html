@@ -1,0 +1,8 @@
+<h2>Select Domain</h2>
+<ul class="list-group">
+  {% for domain in domains %}
+    <li class="list-group-item">
+      <a href="{% url 'attempt_test_levels' domain %}">{{ course }}</a>
+    </li>
+  {% endfor %}
+</ul>

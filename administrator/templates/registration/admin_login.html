@@ -1,0 +1,24 @@
+{% extends 'main/base_auth.html' %}
+{% block title %}Admin Login{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow-lg border-primary">
+            <div class="card-body p-4">
+                <h3 class="text-center mb-4">Admin Login</h3>
+
+                <form method="post" class="border p-4 rounded bg-dark shadow">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary w-100">Login as Admin</button>
+                    <div class="text-center mt-3">
+                        <button type="button" class="link-light small btn btn-link p-0" id="show-forgot-password" data-bs-toggle="modal" data-bs-target="#loginModal">Forgot Password?</button>
+                    </div>
+                </form>
+                <p class="text-center mt-3"><a href="{% url 'custom_login' %}">Go to regular login</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

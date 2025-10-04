@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Developer Export PDF</title>
+    <style>
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #333; padding: 8px; text-align: left; }
+        th { background: #eee; }
+    </style>
+</head>
+<body>
+    <h2>Filtered Developer List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Skills</th>
+                <th>Domain</th>
+                <th>Certificates</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for dev in developers %}
+            <tr>
+                <td>{{ dev.name }}</td>
+                <td>{{ dev.email }}</td>
+                <td>{{ dev.skills }}</td>
+                <td>{{ dev.domain }}</td>
+                <td>
+                  {% for cert in dev.certificate_set.all %}
+                    {{ cert.course.title }} ({{ cert.level }}){% if not forloop.last %}, {% endif %}
+                  {% empty %}None{% endfor %}
+                </td>
+            </tr>
+        {% empty %}
+            <tr><td colspan="5">No developers found for the selected filters.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

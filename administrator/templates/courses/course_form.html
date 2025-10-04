@@ -1,0 +1,13 @@
+<!-- templates/admin_panel/course_form.html -->
+{% extends 'main/base_auth.html' %}
+{% block content %}
+<div class="container mt-4">
+  <h2>{% if form.instance.pk %}Edit Course{% else %}Add Course{% endif %}</h2>
+  <form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">Save</button>
+    <a href="{% url 'course_list' %}" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>
+{% endblock %}

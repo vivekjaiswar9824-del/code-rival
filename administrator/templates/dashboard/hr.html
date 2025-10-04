@@ -1,0 +1,485 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HR Dashboard | CodeRivals</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+  <style>
+    :root {
+      --sidebar-width: 250px;
+      --sidebar-collapsed-width: 60px;
+    }
+
+    html {
+      scroll-padding-top: 70px;
+    }
+
+    body {
+      overflow-x: hidden;
+      background-color: #f8f9fa;
+    }
+
+    .sidebar {
+      height: 100vh;
+      position: fixed;
+      top: 56px;
+      left: 0;
+      width: var(--sidebar-width);
+      background-color: #343a40;
+      transition: width 0.4s ease;
+      z-index: 1000;
+      padding-top: 20px;
+      overflow: hidden;
+    }
+
+    .sidebar.collapsed {
+      width: var(--sidebar-collapsed-width);
+    }
+
+    .sidebar .nav-link {
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 20px;
+      white-space: nowrap;
+      transition: background-color 0.3s;
+    }
+
+    .sidebar .nav-link:hover {
+      background-color: #495057;
+    }
+
+    .sidebar .link-text {
+      transition: opacity 0.3s ease;
+    }
+
+    .sidebar.collapsed .link-text {
+      opacity: 0;
+    }
+
+    .main-content {
+      margin-left: var(--sidebar-width);
+      padding: 20px;
+      transition: margin-left 0.4s ease;
+    }
+
+    .main-content.collapsed {
+      margin-left: var(--sidebar-collapsed-width);
+    }
+
+    .card {
+      border-radius: 1rem;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .toggle-btn {
+      background-color: white;
+      border: none;
+      font-size: 22px;
+      padding: 5px 12px;
+      margin-right: 1rem;
+    }
+
+    .navbar-custom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #0d6efd;
+      padding: 0.5rem 1rem;
+    }
+
+    .navbar-custom span {
+      color: white;
+      font-size: 20px;
+      margin: 0;
+    }
+
+    .developer-scroll {
+      max-height: 600px;
+      overflow-y: auto;
+      padding-right: 10px;
+    }
+
+    .developer-scroll::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .developer-scroll::-webkit-scrollbar-thumb {
+      background-color: #ccc;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <nav class="navbar navbar-custom fixed-top">
+    <div class="d-flex align-items-center">
+      <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+      <span>CodeRivals HR Panel</span>
+    </div>
+    <div class="dropdown">
+      <button class="btn btn-outline-light dropdown-toggle d-flex align-items-center" type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="bi bi-person-circle fs-4 me-1"></i>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#updateModal"><i class="bi bi-pencil-square me-2"></i>Update Profile</a></li>
+        <li>
+  <a class="dropdown-item text-danger" href="/logout">
+    <i class="bi bi-box-arrow-right me-2"></i>Logout
+  </a>
+</li>
+
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Sidebar -->
+  <div id="sidebar" class="sidebar">
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a class="nav-link" href="#profile">
+          <span>👤</span> <span class="link-text">HR Profile</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#filters">
+          <span>🔍</span> <span class="link-text">Developer Filters</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#developers">
+          <span>👨‍💻</span> <span class="link-text">Developer List</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#history">
+          <span>📜</span> <span class="link-text">Developer History</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Main Content -->
+  <div id="mainContent" class="main-content">
+    <section id="profile">
+      <h3>👤 HR Profile</h3>
+      <div class="text-center mb-5">
+        <h2>Welcome, {{ hr_user.name }}!</h2>
+        <p>HR ID: <strong>{{ hr_user.id }}</strong></p>
+        <p>Company: <strong>{{ hr_user.company_name }}</strong></p>
+      </div>
+    </section>
+
+    <section id="filters">
+      <h3>🔍 Developer Filters</h3>
+      <div class="card p-3 mb-4">
+        <form class="row g-3 align-items-end" method="get">
+          <div class="col-md-6">
+            <label class="form-label">Domain</label>
+            <select class="form-select" name="domain">
+              <option value="">All Domains</option>
+              {% for d in domain_choices %}
+                <option value="{{ d }}" {% if filter_domain == d %}selected{% endif %}>{{ d }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Certificate Level</label>
+            <select class="form-select" name="cert_level">
+              <option value="">All Levels</option>
+              {% for l in level_choices %}
+                <option value="{{ l }}" {% if filter_cert_level == l %}selected{% endif %}>{{ l }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-12">
+            <label class="form-label d-block">&nbsp;</label>
+            <button type="submit" class="btn btn-primary w-100">Search</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section id="history" class="mt-4">
+      <h3>📜 Developer History</h3>
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+          <a href="{% url 'export_developers_pdf' %}?domain={{ filter_domain }}&cert_level={{ filter_cert_level }}" class="btn btn-danger me-2">Download as PDF</a>
+          <a href="{% url 'export_developers_excel' %}?domain={{ filter_domain }}&cert_level={{ filter_cert_level }}" class="btn btn-success">Download as Excel</a>
+        </div>
+        <div class="text-muted">
+          {% if total_developers > 10 %}
+            <small>Showing {{ history_page_obj.start_index }}-{{ history_page_obj.end_index }} of {{ total_developers }}</small>
+          {% endif %}
+        </div>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead class="table-dark">
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Skills</th>
+              <th>Domain</th>
+              <th>Address</th>
+              <th>Phone Number</th>
+              <th>Date Joined</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for dev in contact_history %}
+            <tr>
+              <td>{{ dev.name }}</td>
+              <td>{{ dev.email }}</td>
+              <td>{{ dev.skills }}</td>
+              <td>{{ dev.domain }}</td>
+              <td>{{ dev.address }}</td>
+              <td>{{ dev.phone_number }}</td>
+              <td>{{ dev.date_joined|date:'Y-m-d' }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="7">No developers found for the selected filters.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      
+      <!-- History Pagination Controls -->
+      {% if history_page_obj.has_other_pages %}
+      <div class="d-flex justify-content-center mt-4">
+        <nav aria-label="History pagination">
+          <ul class="pagination">
+            {% if history_page_obj.has_previous %}
+              <li class="page-item">
+                <a class="page-link" href="?page=1{% if filter_domain %}&domain={{ filter_domain }}{% endif %}{% if filter_cert_level %}&cert_level={{ filter_cert_level }}{% endif %}" aria-label="First">
+                  <span aria-hidden="true">&laquo;&laquo;</span>
+                </a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" href="?page={{ history_page_obj.previous_page_number }}{% if filter_domain %}&domain={{ filter_domain }}{% endif %}{% if filter_cert_level %}&cert_level={{ filter_cert_level }}{% endif %}" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+            {% endif %}
+            
+            {% for num in history_page_obj.paginator.page_range %}
+              {% if history_page_obj.number == num %}
+                <li class="page-item active">
+                  <span class="page-link">{{ num }}</span>
+                </li>
+              {% elif num > history_page_obj.number|add:'-3' and num < history_page_obj.number|add:'3' %}
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ num }}{% if filter_domain %}&domain={{ filter_domain }}{% endif %}{% if filter_cert_level %}&cert_level={{ filter_cert_level }}{% endif %}">{{ num }}</a>
+                </li>
+              {% endif %}
+            {% endfor %}
+            
+            {% if history_page_obj.has_next %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ history_page_obj.next_page_number }}{% if filter_domain %}&domain={{ filter_domain }}{% endif %}{% if filter_cert_level %}&cert_level={{ filter_cert_level }}{% endif %}" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" href="?page={{ history_page_obj.paginator.num_pages }}{% if filter_domain %}&domain={{ filter_domain }}{% endif %}{% if filter_cert_level %}&cert_level={{ filter_cert_level }}{% endif %}" aria-label="Last">
+                  <span aria-hidden="true">&raquo;&raquo;</span>
+                </a>
+              </li>
+            {% endif %}
+          </ul>
+        </nav>
+      </div>
+      {% endif %}
+    </section>
+
+    <section id="developers">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>👨‍💻 Developer List</h3>
+        <div class="text-muted">
+          <small>Total Developers: <strong>{{ total_developers }}</strong></small>
+          {% if total_developers > 10 %}
+            <small class="ms-2">| Showing {{ page_obj.start_index }}-{{ page_obj.end_index }} of {{ total_developers }}</small>
+          {% endif %}
+        </div>
+      </div>
+      
+      <div class="developer-scroll">
+        <div class="row g-3">
+          {% for dev in developers %}
+          <div class="col-md-4">
+            <div class="card p-3">
+              <h5>{{ dev.name }}</h5>
+              <p><strong>Email:</strong> {{ dev.email }}</p>
+              <p><strong>Skills:</strong> {{ dev.skills }}</p>
+              <p><strong>Domain:</strong> {{ dev.domain }}</p>
+              <p><strong>Certificates:</strong> 
+                {% for cert in dev.certificate_set.all %}
+                  {{ cert.course.title }} ({{ cert.level }}){% if not forloop.last %}, {% endif %}
+                {% empty %}None{% endfor %}
+              </p>
+              <div class="d-flex justify-content-between mt-3">
+                <button class="btn btn-success flex-fill me-2">Contact</button>
+                <button class="btn btn-outline-secondary flex-fill" data-bs-toggle="modal" data-bs-target="#devModal{{ dev.id }}">View</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Modern Modal for developer info -->
+          <div class="modal fade" id="devModal{{ dev.id }}" tabindex="-1" aria-labelledby="devModalLabel{{ dev.id }}" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content rounded-4 shadow-lg">
+                <div class="modal-body p-4">
+                  <div class="text-center mb-3">
+                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 70px; height: 70px; font-size: 2.5rem;">
+                      <i class="bi bi-person-circle"></i>
+                    </div>
+                    <h4 class="fw-bold mt-3 mb-1">{{ dev.name }}</h4>
+                    <div class="text-muted small mb-2">Joined: {{ dev.date_joined|date:'Y-m-d' }}</div>
+                  </div>
+                  <hr>
+                  <div class="mb-2"><strong>Email:</strong> <span class="text-muted">{{ dev.email }}</span></div>
+                  <div class="mb-2"><strong>Skills:</strong> <span class="text-muted">{{ dev.skills }}</span></div>
+                  <div class="mb-2"><strong>Domain:</strong> <span class="text-muted">{{ dev.domain }}</span></div>
+                  <div class="mb-2"><strong>Address:</strong> <span class="text-muted">{{ dev.address }}</span></div>
+                  <div class="mb-2"><strong>Phone Number:</strong> <span class="text-muted">{{ dev.phone_number }}</span></div>
+                  <div class="mb-2"><strong>Certificates:</strong> 
+                    <span class="text-muted">
+                    {% for cert in dev.certificate_set.all %}
+                      {{ cert.course.title }} ({{ cert.level }}){% if not forloop.last %}, {% endif %}
+                    {% empty %}None{% endfor %}
+                    </span>
+                  </div>
+                </div>
+                <div class="modal-footer border-0 pt-0 pb-4 justify-content-center">
+                  <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">Cancel</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% empty %}
+          <div class="col-12">
+            <div class="alert alert-warning">No developers found for the selected filters.</div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      
+      <!-- Pagination Controls -->
+      {% if page_obj.has_other_pages %}
+      <div class="d-flex justify-content-center mt-4">
+        <nav aria-label="Developer pagination">
+          <ul class="pagination">
+            {% if page_obj.has_previous %}
+              <li class="page-item">
+                <a class="page-link" href="?page=1{% if filter_domain %}&domain={{ filter_domain }}{% endif %}{% if filter_cert_level %}&cert_level={{ filter_cert_level }}{% endif %}" aria-label="First">
+                  <span aria-hidden="true">&laquo;&laquo;</span>
+                </a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if filter_domain %}&domain={{ filter_domain }}{% endif %}{% if filter_cert_level %}&cert_level={{ filter_cert_level }}{% endif %}" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+            {% endif %}
+            
+            {% for num in page_obj.paginator.page_range %}
+              {% if page_obj.number == num %}
+                <li class="page-item active">
+                  <span class="page-link">{{ num }}</span>
+                </li>
+              {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ num }}{% if filter_domain %}&domain={{ filter_domain }}{% endif %}{% if filter_cert_level %}&cert_level={{ filter_cert_level }}{% endif %}">{{ num }}</a>
+                </li>
+              {% endif %}
+            {% endfor %}
+            
+            {% if page_obj.has_next %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if filter_domain %}&domain={{ filter_domain }}{% endif %}{% if filter_cert_level %}&cert_level={{ filter_cert_level }}{% endif %}" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if filter_domain %}&domain={{ filter_domain }}{% endif %}{% if filter_cert_level %}&cert_level={{ filter_cert_level }}{% endif %}" aria-label="Last">
+                  <span aria-hidden="true">&raquo;&raquo;</span>
+                </a>
+              </li>
+            {% endif %}
+          </ul>
+        </nav>
+      </div>
+      {% endif %}
+    </section>
+  </div>
+
+  <!-- Update Modal -->
+  <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form action="{% url 'update_hr_profile' %}" method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="modal-header">
+            <h5 class="modal-title" id="updateModalLabel">Update Profile</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3 text-center">
+              {% if hr_user.profile_photo %}
+                <img src="{{ hr_user.profile_photo.url }}" alt="Profile Photo" class="rounded-circle mb-2" style="width: 80px; height: 80px; object-fit: cover;">
+              {% else %}
+                <div class="bg-secondary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 80px; height: 80px; font-size: 2.5rem;">
+                  <i class="bi bi-person-circle"></i>
+                </div>
+              {% endif %}
+              <div class="mt-2">
+                <input type="file" name="profile_photo" class="form-control" accept="image/*">
+              </div>
+            </div>
+            <div class="mb-3">
+              <input type="text" name="name" class="form-control" placeholder="Enter Name" value="{{ hr_user.name }}">
+            </div>
+            <div class="mb-3">
+              <input type="email" name="email" class="form-control" placeholder="Enter Email" value="{{ hr_user.email }}">
+            </div>
+            <div class="mb-3">
+              <input type="number" name="phone_number" class="form-control" placeholder="Enter Phone" value="{{ hr_user.phone_number }}">
+            </div>
+            <div class="mb-3">
+              <input type="text" name="address" class="form-control" placeholder="Enter Address" value="{{ hr_user.address }}">
+            </div>
+            <div class="mb-3">
+              <input type="password" name="password" class="form-control" placeholder="New Password (leave blank to keep current)">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Update</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS + Toggle Script -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('collapsed');
+      document.getElementById('mainContent').classList.toggle('collapsed');
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,12 @@
+<!-- templates/admin/certifications/certification_form.html -->
+{% extends "main/base.html" %}
+{% block content %}
+<div class="container mt-5 text-white">
+  <h2>Add Certification</h2>
+  <form method="post" class="mt-4">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">Submit</button>
+  </form>
+</div>
+{% endblock %}

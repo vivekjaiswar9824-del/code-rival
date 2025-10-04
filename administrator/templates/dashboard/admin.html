@@ -1,0 +1,70 @@
+{% extends "main/base.html" %}
+{% block content %}
+{% if messages %}
+{% for message in messages %}
+<div id="msg1  class=" alert alert-success mt-2">{{ message }}</div>
+{% endfor %}
+{% endif %}
+
+<div class="container-fluid mt-5">
+  <h2 class="text-white mb-4 text-center text-md-start">Admin Dashboard</h2>
+
+  <!-- Summary Cards -->
+  <div class="row g-4 mb-4">
+    <div class="col-6 col-md-3">
+      <div class="card text-white bg-primary shadow h-100">
+        <div class="card-body">
+          <h5>Developers</h5>
+          <h3>{{ developer_count }}</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card text-white bg-success shadow h-100">
+        <div class="card-body">
+          <h5>HRs</h5>
+          <h3>{{ hr_count }}</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card text-white bg-warning shadow h-100">
+        <div class="card-body">
+          <h5>Courses</h5>
+          <h3>{{ course_count }}</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card text-white bg-danger shadow h-100">
+        <div class="card-body">
+          <h5>Certifications</h5>
+          <h3>{{ cert_count }}</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="row mb-4">
+    <div class="col text-end d-flex flex-wrap justify-content-end gap-2">
+      <a href="{% url 'add_course' %}" class="btn btn-outline-primary">➕ Add Course</a>
+      <a href="{% url 'add_certification' %}" class="btn btn-outline-success">🎓 Add Certification</a>
+      <a href="{% url 'add_question' %}" class="btn btn-outline-warning">🧠 Add Questions</a>
+      <a href="{% url 'test_settings' %}" class="btn btn-outline-danger">⚙️ Test Settings</a>
+    </div>
+  </div>
+
+  <!-- Tables -->
+  
+    </div>
+    <script>
+      setTimeout(function () {
+        if ($("#msg1").length > 0) {
+          $("#msg1").remove();
+        }
+      }, 3000);
+    </script>
+
+
+    {% endblock %}

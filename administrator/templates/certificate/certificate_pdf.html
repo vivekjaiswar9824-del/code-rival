@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Certificate - {{ developer.name }}</title>
+    <style>
+        @page {
+            size: A4 landscape;
+            margin: 0.5in;
+        }
+        
+        body {
+            font-family: 'Times New Roman', serif;
+            margin: 0;
+            padding: 0;
+            background: white;
+        }
+        
+        .certificate {
+            width: 100%;
+            height: 100%;
+            border: 12px solid #1e3a8a;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            background: white;
+            position: relative;
+            box-sizing: border-box;
+        }
+        
+        .certificate::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            bottom: 15px;
+            border: 3px solid #3b82f6;
+            border-radius: 8px;
+            pointer-events: none;
+        }
+        
+        .header {
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #1e3a8a;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .main-title {
+            font-size: 42px;
+            font-weight: bold;
+            color: #1e3a8a;
+            margin: 20px 0;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .subtitle {
+            font-size: 18px;
+            color: #666;
+            margin: 15px 0;
+            font-style: italic;
+        }
+        
+        .recipient {
+            font-size: 32px;
+            font-weight: bold;
+            color: #000;
+            margin: 25px 0;
+            text-transform: uppercase;
+            border-bottom: 3px solid #1e3a8a;
+            display: inline-block;
+            padding-bottom: 8px;
+            letter-spacing: 1px;
+        }
+        
+        .course-info {
+            margin: 25px 0;
+        }
+        
+        .course-text {
+            font-size: 16px;
+            color: #333;
+            margin: 12px 0;
+        }
+        
+        .course-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1e3a8a;
+            margin: 15px 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .level-badge {
+            font-size: 20px;
+            font-weight: bold;
+            color: #dc2626;
+            margin: 12px 0;
+            text-transform: uppercase;
+            background: linear-gradient(45deg, #fef2f2, #fee2e2);
+            padding: 10px 16px;
+            border-radius: 25px;
+            display: inline-block;
+            border: 2px solid #dc2626;
+            box-shadow: 0 2px 4px rgba(220, 38, 38, 0.2);
+        }
+        
+        .date-info {
+            font-size: 16px;
+            color: #666;
+            margin: 25px 0;
+            font-weight: 500;
+        }
+        
+        .signatures {
+            position: absolute;
+            bottom: 60px;
+            left: 80px;
+            right: 80px;
+        }
+        
+        .sig-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        
+        .sig-item {
+            text-align: center;
+            flex: 1;
+            margin: 0 20px;
+        }
+        
+        .sig-line {
+            border-top: 2px solid #1e3a8a;
+            width: 180px;
+            margin: 0 auto 8px auto;
+        }
+        
+        .sig-label {
+            font-size: 14px;
+            color: #666;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+        
+        .cert-id {
+            position: absolute;
+            bottom: 20px;
+            right: 30px;
+            font-size: 11px;
+            color: #999;
+            font-style: italic;
+        }
+        
+        .decorative-element {
+            position: absolute;
+            top: 50px;
+            left: 50px;
+            width: 40px;
+            height: 40px;
+            border: 2px solid #3b82f6;
+            border-radius: 50%;
+            opacity: 0.3;
+        }
+        
+        .decorative-element:nth-child(2) {
+            top: 50px;
+            right: 50px;
+            left: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="certificate">
+        <div class="decorative-element"></div>
+        <div class="decorative-element"></div>
+        
+        <div class="header">
+            <div class="logo">CODE RIVAL</div>
+            <div class="main-title">Certificate of Completion</div>
+        </div>
+        
+        <div class="subtitle">This is to certify that</div>
+        
+        <div class="recipient">{{ developer.name }}</div>
+        
+        <div class="course-info">
+            <div class="course-text">has successfully completed the</div>
+            <div class="level-badge">{{ level }} Level</div>
+            <div class="course-text">course in</div>
+            <div class="course-name">{{ course.title }}</div>
+            <div class="course-text">Domain: {{ course.domain }}</div>
+        </div>
+        
+        <div class="date-info">
+            <strong>Date of Completion:</strong> {{ certificate.issued_at|date:"F j, Y" }}
+        </div>
+        
+        <div class="signatures">
+            <div class="sig-container">
+                <div class="sig-item">
+                    <div class="sig-line"></div>
+                    <div class="sig-label">Course Instructor</div>
+                </div>
+                <div class="sig-item">
+                    <div class="sig-line"></div>
+                    <div class="sig-label">Program Director</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="cert-id">
+            Certificate ID: CR-{{ certificate.id }}-{{ certificate.issued_at|date:"Y" }}
+        </div>
+    </div>
+</body>
+</html>

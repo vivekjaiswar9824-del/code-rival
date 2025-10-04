@@ -1,0 +1,38 @@
+<!-- templates/admin_panel/course_list.html -->
+{% extends 'main/base.html' %}
+{% block content %}
+<div class="container mt-4">
+  <h2 class="text-white">Courses</h2>
+  <a href="{% url 'add_course' %}" class="btn btn-success mb-3">Add New Course</a>
+  <table class="table table-dark table-striped">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Assigned Developers</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for course in courses %}
+      <tr>
+        <td>{{ course.title }}</td>
+        <td>{{ course.description|truncatewords:20 }}</td>
+        <td>
+          {% for dev in course.assigned_developers.all %}
+            <span class="badge bg-primary">{{ dev.name }}</span>
+          {% empty %}
+            <span class="text-muted">None</span>
+          {% endfor %}
+        </td>
+        <td>
+          <a href="{% url 'edit_course' course.id %}" class="btn btn-sm btn-primary">Edit</a>
+          <a href="{% url 'delete_course' course.id %}" class="btn btn-sm btn-danger">Delete</a>
+          <!-- <a href="{% url 'assign_developers' course.id %}" class="btn btn-sm btn-warning">Assign Developers</a> -->
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

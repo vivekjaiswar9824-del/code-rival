@@ -1,0 +1,21 @@
+{% extends 'main/base_auth.html' %}
+{% block content %}
+{% if 'Basic' in completed_levels or 'Intermediate' in completed_levels or 'Advanced' in completed_levels %}
+<div class="dropdown mt-3">
+  <button class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown">
+    Generate Certificate
+  </button>
+  <ul class="dropdown-menu">
+    {% if 'Basic' in completed_levels %}
+      <li><a class="dropdown-item" href="{% url 'generate_certificate' request.user.id course.id 'Basic' %}">Basic</a></li>
+    {% endif %}
+    {% if 'Intermediate' in completed_levels %}
+      <li><a class="dropdown-item" href="{% url 'generate_certificate' request.user.id course.id 'Intermediate' %}">Intermediate</a></li>
+    {% endif %}
+    {% if 'Advanced' in completed_levels %}
+      <li><a class="dropdown-item" href="{% url 'generate_certificate' request.user.id course.id 'Advanced' %}">Advanced</a></li>
+    {% endif %}
+  </ul>
+</div>
+{% endif %}
+{% endblock %}

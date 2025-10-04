@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Test History & Analytics</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .stats-card {
+      border: none;
+      border-radius: 1rem;
+      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+      transition: transform 0.2s ease;
+    }
+
+    .stats-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .performance-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .success-card {
+      background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+      color: white;
+    }
+
+    .warning-card {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: white;
+    }
+
+    .info-card {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      color: white;
+    }
+
+    .history-item {
+      border-left: 4px solid #dee2e6;
+      transition: all 0.2s ease;
+    }
+
+    .history-item:hover {
+      border-left-color: #007bff;
+      background-color: #f8f9fa;
+    }
+
+    .history-passed {
+      border-left-color: #28a745;
+    }
+
+    .history-failed {
+      border-left-color: #dc3545;
+    }
+
+    .progress-ring {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto;
+    }
+
+    .course-performance {
+      background: white;
+      border-radius: 0.75rem;
+      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container mt-4">
+    <!-- Header -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center">
+          <h2><i class="fas fa-chart-line me-2"></i>Test History & Analytics</h2>
+          <a href="{% url 'attempt-test' %}" class="btn btn-primary">
+            <i class="fas fa-plus me-1"></i>Take New Test
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Overall Statistics -->
+    <div class="row mb-4">
+      <div class="col-md-3">
+        <div class="card stats-card performance-card">
+          <div class="card-body text-center">
+            <i class="fas fa-clipboard-list fa-2x mb-2"></i>
+            <h3 class="mb-1">{{ total_tests }}</h3>
+            <small>Total Tests</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card stats-card success-card">
+          <div class="card-body text-center">
+            <i class="fas fa-check-circle fa-2x mb-2"></i>
+            <h3 class="mb-1">{{ passed_tests }}</h3>
+            <small>Passed Tests</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card stats-card warning-card">
+          <div class="card-body text-center">
+            <i class="fas fa-times-circle fa-2x mb-2"></i>
+            <h3 class="mb-1">{{ failed_tests }}</h3>
+            <small>Failed Tests</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card stats-card info-card">
+          <div class="card-body text-center">
+            <i class="fas fa-percentage fa-2x mb-2"></i>
+            <h3 class="mb-1">{{ pass_rate }}%</h3>
+            <small>Pass Rate</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Performance Overview -->
+    <div class="row mb-4">
+      <div class="col-md-6">
+        <div class="card stats-card">
+          <div class="card-header bg-primary text-white">
+            <h5 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Average Score</h5>
+          </div>
+          <div class="card-body text-center">
+            <div class="progress-ring">
+              <svg width="120" height="120" viewBox="0 0 120 120">
+                <circle cx="60" cy="60" r="50" fill="none" stroke="#e9ecef" stroke-width="8"/>
+                <circle cx="60" cy="60" r="50" fill="none" stroke="#007bff" stroke-width="8" 
+                        stroke-dasharray="{{ stroke_dasharray }}" 
+                        stroke-dashoffset="{{ stroke_dashoffset }}" transform="rotate(-90 60 60)"/>
+              </svg>
+              <div class="position-absolute top-50 start-50 translate-middle">
+                <h3 class="mb-0">{{ avg_score }}%</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card stats-card">
+          <div class="card-header bg-success text-white">
+            <h5 class="mb-0"><i class="fas fa-trophy me-2"></i>Recent Performance</h5>
+          </div>
+          <div class="card-body">
+            {% if certifications %}
+              <div class="mb-3">
+                <h6>Latest Test Results</h6>
+                {% for cert in certifications|slice:":5" %}
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <div>
+                    <strong>{{ cert.course.title }}</strong>
+                    <br><small class="text-muted">{{ cert.level }} - {{ cert.issued_at|date:"M j, Y" }}</small>
+                  </div>
+                  <div class="text-end">
+                    <span class="badge {% if cert.status == 'Passed' %}bg-success{% else %}bg-danger{% endif %}">
+                      {{ cert.score }}%
+                    </span>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            {% else %}
+              <p class="text-muted text-center">No test history available</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Course Performance -->
+    {% if course_performance %}
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="card stats-card">
+          <div class="card-header bg-info text-white">
+            <h5 class="mb-0"><i class="fas fa-book me-2"></i>Performance by Course</h5>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              {% for course_name, data in course_performance.items %}
+              <div class="col-md-6 mb-3">
+                <div class="course-performance p-3">
+                  <h6 class="mb-2">{{ course_name }}</h6>
+                  <div class="row text-center">
+                    <div class="col-4">
+                      <div class="text-primary">
+                        <h5 class="mb-0">{{ data.total_attempts }}</h5>
+                        <small>Attempts</small>
+                      </div>
+                    </div>
+                    <div class="col-4">
+                      <div class="text-success">
+                        <h5 class="mb-0">{{ data.passed }}</h5>
+                        <small>Passed</small>
+                      </div>
+                    </div>
+                    <div class="col-4">
+                      <div class="text-warning">
+                        <h5 class="mb-0">{{ data.avg_score|floatformat:1 }}%</h5>
+                        <small>Avg Score</small>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="progress mt-2" style="height: 8px;">
+                    <div class="progress-bar bg-success" style="width: {{ data.pass_percent|floatformat:0 }}%"></div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Test History -->
+    <div class="row">
+      <div class="col-12">
+        <div class="card stats-card">
+          <div class="card-header bg-dark text-white">
+            <h5 class="mb-0"><i class="fas fa-history me-2"></i>Complete Test History</h5>
+          </div>
+          <div class="card-body">
+            {% if certifications %}
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Course</th>
+                      <th>Level</th>
+                      <th>Score</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for cert in certifications %}
+                    <tr class="history-item {% if cert.status == 'Passed' %}history-passed{% else %}history-failed{% endif %}">
+                      <td>{{ cert.issued_at|date:"M j, Y g:i A" }}</td>
+                      <td>{{ cert.course.title }}</td>
+                      <td><span class="badge bg-secondary">{{ cert.level }}</span></td>
+                      <td>
+                        <span class="badge {% if cert.score >= 80 %}bg-success{% elif cert.score >= 60 %}bg-warning{% else %}bg-danger{% endif %}">
+                          {{ cert.score }}%
+                        </span>
+                      </td>
+                      <td>
+                        <span class="badge {% if cert.status == 'Passed' %}bg-success{% else %}bg-danger{% endif %}">
+                          {{ cert.status }}
+                        </span>
+                      </td>
+                      <td>
+                        <a href="{% url 'test-result' cert.course.id cert.level %}" class="btn btn-sm btn-outline-primary">
+                          <i class="fas fa-eye"></i> View
+                        </a>
+                        {% if cert.status == 'Passed' %}
+                          {% for certificate in certificates %}
+                            {% if certificate.course.id == cert.course.id and certificate.level == cert.level %}
+                              {% if certificate.certificate_file and certificate.certificate_file != '' %}
+                                                             <a href="{% url 'download_certificate' certificate.id %}" class="btn btn-sm btn-outline-success">
+                                 <i class="fas fa-download"></i> Download
+                               </a>
+                              {% else %}
+                              <button class="btn btn-sm btn-outline-secondary" disabled>
+                                <i class="fas fa-clock"></i> Generating...
+                              </button>
+                              {% endif %}
+                            {% endif %}
+                          {% endfor %}
+                        {% endif %}
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            {% else %}
+              <div class="text-center py-4">
+                <i class="fas fa-clipboard-list fa-3x text-muted mb-3"></i>
+                <h5 class="text-muted">No test history available</h5>
+                <p class="text-muted">Start by taking your first test!</p>
+                <a href="{% url 'attempt-test' %}" class="btn btn-primary">
+                  <i class="fas fa-play me-1"></i>Take Your First Test
+                </a>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html> 

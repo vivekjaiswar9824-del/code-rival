@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Developer Portal</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+  <style>
+    :root {
+      --animate-duration: 2s;
+      --primary-gradient: linear-gradient(135deg, #232739, #9c27b0);
+      --cta-gradient: linear-gradient(to right, #1b3244, #11a5ff);
+      --glass-bg: rgb(128 76 76 / 10%);
+      --glass-border: rgba(255, 255, 255, 0.2);
+    }
+
+    body {
+      font-family: 'Times New Roman', serif;
+      background: linear-gradient(to right, #e3f2fd, #f0f2f5);
+      overflow-x: hidden;
+    }
+
+    .btn-main {
+      background: linear-gradient(135deg, #ff9800, #ff5722);
+      color: white;
+      border: none;
+      transition: 0.3s ease;
+    }
+
+    .btn-main:hover {
+      background: linear-gradient(135deg, #fb8c00, #e65100);
+    }
+
+    .hero {
+      background: var(--primary-gradient);
+      color: white;
+      padding: 100px 0;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 3.4rem;
+      font-weight: bold;
+    }
+
+    .modal-content {
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      color: #fff;
+    }
+
+    .card-highlight {
+      background: #ffffff;
+      border: none;
+      border-radius: 20px;
+      padding: 1.5rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      transition: all 0.4s ease;
+    }
+
+    .card-highlight:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    }
+
+    .domain-card {
+      width: 240px;
+      height: 220px;
+      border-radius: 20px;
+      backdrop-filter: blur(8px);
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .domain-card:hover {
+      transform: scale(1.07);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+    }
+
+    .marquee-track {
+      animation: slide-marquee 20s linear infinite;
+      display: flex;
+      gap: 1.5rem;
+      width: max-content;
+    }
+
+    @keyframes slide-marquee {
+      0% {
+        transform: translateX(0%);
+      }
+
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
+    .cta {
+      background: var(--cta-gradient);
+      color: white;
+      padding: 80px 0;
+    }
+
+    .cta h3 {
+      font-size: 2rem;
+    }
+
+    .search-box input {
+      height: 50px;
+      font-size: 1rem;
+      border-radius: 10px;
+      padding-left: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    footer {
+      background-color: #121212;
+      color: #ccc;
+      padding: 20px 0;
+      font-size: 0.95rem;
+    }
+
+    .text-gradient {
+      background: linear-gradient(45deg, #00c6ff, #0072ff);
+
+      -webkit-text-fill-color: transparent;
+    }
+
+    @media (max-width: 768px) {
+      .domain-card {
+        width: 90%;
+      }
+    }
+
+
+    #scrollBtn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 1000;
+      display: none;
+      background-color: #644d8b;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 45px;
+      height: 45px;
+      font-size: 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    #scrollBtn:hover {
+      background-color: #0056b3;
+    }
+
+    /* Dark Theme Support */
+    html[data-bs-theme='dark'] {
+      background: #121212;
+      color: #e0e0e0;
+    }
+
+    html[data-bs-theme='dark'] body {
+      background: #121212;
+      color: #e0e0e0;
+    }
+
+    html[data-bs-theme='dark'] .hero {
+      background: linear-gradient(135deg, #1e1e1e, #333);
+      color: #fff;
+    }
+
+    html[data-bs-theme='dark'] .card-highlight,
+    html[data-bs-theme='dark'] .domain-card {
+      background: rgba(255, 255, 255, 0.05);
+      color: #e0e0e0;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    html[data-bs-theme='dark'] .cta {
+      background: linear-gradient(to right, #212121, #424242);
+      color: #fff;
+    }
+
+    html[data-bs-theme='dark'] footer {
+      background: #000;
+      color: #ccc;
+    }
+
+    html[data-bs-theme='dark'] .search-box input {
+      background: #1f1f1f;
+      color: #fff;
+      border: 1px solid #555;
+    }
+
+    /* ===== MODERN TOAST MESSAGES ===== */
+    .modern-toast {
+      background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 0;
+      overflow: hidden;
+      animation: slideInRight 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .modern-toast:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    }
+
+    .toast-content {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      position: relative;
+    }
+
+    .toast-icon {
+      margin-right: 12px;
+      flex-shrink: 0;
+    }
+
+    .icon-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: bold;
+      animation: bounceIn 0.6s ease;
+    }
+
+    .success-icon {
+      background: linear-gradient(135deg, #4CAF50, #45a049);
+      color: white;
+      box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+    }
+
+    .error-icon {
+      background: linear-gradient(135deg, #f44336, #d32f2f);
+      color: white;
+      box-shadow: 0 4px 15px rgba(244, 67, 54, 0.3);
+    }
+
+    .warning-icon {
+      background: linear-gradient(135deg, #ff9800, #f57c00);
+      color: white;
+      box-shadow: 0 4px 15px rgba(255, 152, 0, 0.3);
+    }
+
+    .info-icon {
+      background: linear-gradient(135deg, #2196F3, #1976D2);
+      color: white;
+      box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+    }
+
+    .toast-message {
+      flex: 1;
+      padding-right: 8px;
+    }
+
+    .message-text {
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.4;
+      color: #ffffff;
+      margin: 0;
+    }
+
+    .toast-close {
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.7);
+      font-size: 18px;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .toast-close:hover {
+      background: rgba(255,255,255,0.1);
+      color: #ffffff;
+      transform: scale(1.1);
+    }
+
+    .toast-progress {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: rgba(255,255,255,0.1);
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 100%;
+      transform-origin: left;
+      animation: progressBar 6s linear forwards;
+    }
+
+    .toast-progress-success {
+      background: linear-gradient(90deg, #4CAF50, #45a049);
+    }
+
+    .toast-progress-error, .toast-progress-danger {
+      background: linear-gradient(90deg, #f44336, #d32f2f);
+    }
+
+    .toast-progress-warning {
+      background: linear-gradient(90deg, #ff9800, #f57c00);
+    }
+
+    .toast-progress-info {
+      background: linear-gradient(90deg, #2196F3, #1976D2);
+    }
+
+    /* Toast Type Specific Styles */
+    .toast-success {
+      border-left: 4px solid #4CAF50;
+    }
+
+    .toast-error, .toast-danger {
+      border-left: 4px solid #f44336;
+    }
+
+    .toast-warning {
+      border-left: 4px solid #ff9800;
+    }
+
+    .toast-info {
+      border-left: 4px solid #2196F3;
+    }
+
+    /* Animations */
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translate3d(100%, 0, 0);
+      }
+      to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+      }
+    }
+
+    @keyframes bounceIn {
+      0% {
+        opacity: 0;
+        transform: scale(0.3);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.05);
+      }
+      70% {
+        transform: scale(0.9);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes progressBar {
+      from {
+        transform: scaleX(1);
+      }
+      to {
+        transform: scaleX(0);
+      }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .modern-toast {
+        margin: 0 10px;
+        min-width: 320px;
+      }
+      
+      .toast-content {
+        padding: 12px;
+      }
+      
+      .icon-circle {
+        width: 35px;
+        height: 35px;
+        font-size: 16px;
+      }
+      
+      .message-text {
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Scroll to Top Button -->
+  <button id="scrollBtn" title="Go to top">^</button>
+  <!-- Add your main HTML content here as per your earlier layout -->
+  <!-- Only style and structure updated, not core layout. Your modal, hero, cards, and sections remain the same. -->
+
+  {% if messages %}
+  <!-- Enhanced Toast Message Block -->
+  <div aria-live="polite" aria-atomic="true" class="position-fixed top-0 end-0 p-3" style="z-index: 2000; min-width: 400px;">
+    {% for message in messages %}
+      <div class="modern-toast toast-{{ message.tags|default:'info' }} show mb-3 shadow-lg" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="6000">
+        <div class="toast-content">
+          <div class="toast-icon">
+            {% if message.tags == 'success' %}
+              <div class="icon-circle success-icon">
+                <i class="bi bi-check-lg"></i>
+              </div>
+            {% elif message.tags == 'error' or message.tags == 'danger' %}
+              <div class="icon-circle error-icon">
+                <i class="bi bi-x-lg"></i>
+              </div>
+            {% elif message.tags == 'warning' %}
+              <div class="icon-circle warning-icon">
+                <i class="bi bi-exclamation-lg"></i>
+              </div>
+            {% else %}
+              <div class="icon-circle info-icon">
+                <i class="bi bi-info-lg"></i>
+              </div>
+            {% endif %}
+          </div>
+          <div class="toast-message">
+            <div class="message-text">{{ message }}</div>
+          </div>
+          <button type="button" class="toast-close" data-bs-dismiss="toast" aria-label="Close">
+            <i class="bi bi-x"></i>
+          </button>
+        </div>
+        <div class="toast-progress">
+          <div class="progress-bar toast-progress-{{ message.tags|default:'info' }}"></div>
+        </div>
+      </div>
+    {% endfor %}
+
+  </div>
+  {% endif %}
+
+  <div class="blur-content">
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="container">
+        <h1 class="mb-3">Welcome to the Developer Portal</h1>
+        <p class="lead">Explore career-oriented courses and certifications</p>
+
+
+        <!-- Dropdown Register Button -->
+        <div class="dropdown">
+          <!-- Login Trigger -->
+          <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#loginModal">
+            Login
+          </button>
+
+          <a class="btn btn-light dropdown-toggle" href="#" role="button" id="registerDropdown"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            Register
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="registerDropdown">
+            <li><a class="dropdown-item" href="javascript:void(0)" data-bs-toggle="modal"
+                data-bs-target="#devRegisterModal">Register as Developer</a></li>
+            <li><a class="dropdown-item" href="javascript:void(0)" data-bs-toggle="modal"
+                data-bs-target="#hrRegisterModal">Register as HR</a></li>
+          </ul>
+        </div>
+    </section>
+
+
+
+
+    <!-- Search Domain Section -->
+    <section class="search-section text-center py-5">
+      <div class="container">
+        <h2 class="mb-4">Find Courses by Domain</h2>
+        <div class="row justify-content-center">
+          <div class="col-md-6">
+            <div class="search-box">
+              <input list="domain-list" id="domain-input" class="form-control" placeholder="Type or select your domain"
+                required />
+              <datalist id="domain-list">
+                <option value="Web Development">
+                <option value="Data Science">
+                <option value="AI/ML">
+                <option value="Cyber Security">
+                  <!-- Add more as needed -->
+              </datalist>
+            </div>
+            <div id="domain-result" class="mt-3 fw-semibold" style="font-size: 1.1rem;"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Info Section -->
+    <section class="info-section text-center">
+      <div class="container">
+        <h2 class="mb-5">What is Developer Portal?</h2>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="card card-highlight p-4">
+              <h5 class="mb-3">Verified Registration</h5>
+              <p>Start your journey by registering with a valid email or mobile number.</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card card-highlight p-4">
+              <h5 class="mb-3">Domain-Specific Courses</h5>
+              <p>Choose courses from Web Development, AI/ML, Cybersecurity, and more.</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card card-highlight p-4">
+              <h5 class="mb-3">Career Certifications</h5>
+              <p>Earn certificates at 3 levels: Basic, Intermediate, and Advanced.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features text-center" style="padding: 40px;">
+      <div class="container">
+        <h2 class="mb-4">Why Choose Us?</h2>
+        <div class="row mt-4">
+          <div class="col-md-3">
+            <div class="card card-highlight p-3">
+              <h6>Multiple Course Applications</h6>
+              <p>Apply for one or more courses to match your career goals.</p>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card card-highlight p-3">
+              <h6>Track Learning Progress</h6>
+              <p>Access your dashboard to view certifications and learning history.</p>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card card-highlight p-3">
+              <h6>Exams & Evaluations</h6>
+              <p>Attend structured exams to earn your certification levels.</p>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card card-highlight p-3">
+              <h6>Visible to HRs</h6>
+              <p>Show up in HR searches based on your certifications and skills.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Domain Info Marquee with Scroll & Hover Effects -->
+    <section class="py-5 bg-dark text-white">
+      <div class="container text-center">
+        <h2 class="mb-4" style="background: linear-gradient(to right, #a7a7d6, #19188b);; ">
+          Explore Career Domains</h2>
+
+
+
+        <!-- Marquee Container -->
+        <div class="marquee-wrapper overflow-hidden position-relative">
+          <div class="marquee-track d-flex align-items-center">
+
+            <!-- Repeat cards twice for seamless looping -->
+            <div class="d-flex flex-nowrap gap-4">
+
+              <!-- DOMAIN CARD TEMPLATE (Repeatable) -->
+              <div
+                class="domain-card flex-shrink-0 bg-success text-white p-4 rounded shadow animate__animated animate__bounceIn text-center"
+                style="width: 220px; transition: transform 0.3s;">
+                <div class="mb-2 fs-3"><i class="bi bi-bar-chart-line-fill"></i></div>
+                <h5 class="mb-2">Data Science</h5>
+                <a href="#" class="btn btn-light btn-sm">Explore</a>
+              </div>
+
+              <div
+                class="domain-card flex-shrink-0 bg-primary text-white p-4 rounded shadow animate__animated animate__bounceIn text-center"
+                style="width: 220px;">
+                <div class="mb-2 fs-3"><i class="bi bi-code-slash"></i></div>
+                <h5 class="mb-2">Web Development</h5>
+                <a href="#" class="btn btn-light btn-sm">Explore</a>
+              </div>
+
+              <div
+                class="domain-card flex-shrink-0 bg-warning text-dark p-4 rounded shadow animate__animated animate__bounceIn text-center"
+                style="width: 220px;">
+                <div class="mb-2 fs-3"><i class="bi bi-cpu-fill"></i></div>
+                <h5 class="mb-2">AI / ML</h5>
+                <a href="#" class="btn btn-dark btn-sm">Explore</a>
+              </div>
+
+              <div
+                class="domain-card flex-shrink-0 bg-danger text-white p-4 rounded shadow animate__animated animate__bounceIn text-center"
+                style="width: 220px;">
+                <div class="mb-2 fs-3"><i class="bi bi-shield-lock-fill"></i></div>
+                <h5 class="mb-2">Cyber Security</h5>
+                <a href="#" class="btn btn-light btn-sm">Explore</a>
+              </div>
+
+              <div
+                class="domain-card flex-shrink-0 bg-info text-white p-4 rounded shadow animate__animated animate__bounceIn text-center"
+                style="width: 220px;">
+                <div class="mb-2 fs-3"><i class="bi bi-cloud-fill"></i></div>
+                <h5 class="mb-2">Cloud Computing</h5>
+                <a href="#" class="btn btn-light btn-sm">Explore</a>
+              </div>
+
+              <div
+                class="domain-card flex-shrink-0 bg-secondary text-white p-4 rounded shadow animate__animated animate__bounceIn text-center"
+                style="width: 220px;">
+                <div class="mb-2 fs-3"><i class="bi bi-gear-fill"></i></div>
+                <h5 class="mb-2">DevOps</h5>
+                <a href="#" class="btn btn-light btn-sm">Explore</a>
+              </div>
+
+              <div
+                class="domain-card flex-shrink-0 bg-dark text-white p-4 rounded shadow animate__animated animate__bounceIn text-center"
+                style="width: 220px;">
+                <div class="mb-2 fs-3"><i class="bi bi-box-seam"></i></div>
+                <h5 class="mb-2">Blockchain</h5>
+                <a href="#" class="btn btn-light btn-sm">Explore</a>
+              </div>
+
+              <div
+                class="domain-card flex-shrink-0 bg-primary text-white p-4 rounded shadow animate__animated animate__bounceIn text-center"
+                style="width: 220px;">
+                <div class="mb-2 fs-3"><i class="bi bi-easel-fill"></i></div>
+                <h5 class="mb-2">UI/UX Design</h5>
+                <a href="#" class="btn btn-light btn-sm">Explore</a>
+              </div>
+
+              <div
+                class="domain-card flex-shrink-0 bg-success text-white p-4 rounded shadow animate__animated animate__bounceIn text-center"
+                style="width: 220px;">
+                <div class="mb-2 fs-3"><i class="bi bi-phone-fill"></i></div>
+                <h5 class="mb-2">Mobile Dev</h5>
+                <a href="#" class="btn btn-light btn-sm">Explore</a>
+              </div>
+              <div
+                class="domain-card flex-shrink-0 bg-warning text-white p-4 rounded shadow animate__animated animate__bounceIn text-center"
+                style="width: 220px;">
+                <div class="mb-2 fs-3"><i class="bi bi-controller"></i></div>
+                <h5 class="mb-2">Game Dev</h5>
+                <a href="#" class="btn btn-light btn-sm">Explore</a>
+              </div>
+
+              <div
+                class="domain-card flex-shrink-0 bg-secondary text-white p-4 rounded shadow animate__animated animate__bounceIn text-center"
+                style="width: 220px;">
+                <div class="mb-2 fs-3"><i class="bi bi-broadcast-pin"></i></div>
+                <h5 class="mb-2">IoT</h5>
+                <a href="#" class="btn btn-light btn-sm">Explore</a>
+              </div>
+
+              <div
+                class="domain-card flex-shrink-0 bg-light text-dark p-4 rounded shadow animate__animated animate__bounceIn text-center"
+                style="width: 220px;">
+                <div class="mb-2 fs-3"><i class="bi bi-robot"></i></div>
+                <h5 class="mb-2">Robotics</h5>
+                <a href="#" class="btn btn-dark btn-sm">Explore</a>
+              </div>
+
+
+              <!-- Repeated domains -->
+              <div
+                class="domain-card flex-shrink-0 bg-success text-white p-4 rounded shadow animate__animated animate__bounceIn text-center"
+                style="width: 220px; transition: transform 0.3s;">
+                <div class="mb-2 fs-3"><i class="bi bi-bar-chart-line-fill"></i></div>
+                <h5 class="mb-2">Data Science</h5>
+                <a href="#" class="btn btn-light btn-sm">Explore</a>
+              </div>
+
+              <div
+                class="domain-card flex-shrink-0 bg-primary text-white p-4 rounded shadow animate__animated animate__bounceIn text-center"
+                style="width: 220px;">
+                <div class="mb-2 fs-3"><i class="bi bi-code-slash"></i></div>
+                <h5 class="mb-2">Web Development</h5>
+                <a href="#" class="btn btn-light btn-sm">Explore</a>
+              </div>
+
+              <div
+                class="domain-card flex-shrink-0 bg-warning text-dark p-4 rounded shadow animate__animated animate__bounceIn text-center"
+                style="width: 220px;">
+                <div class="mb-2 fs-3"><i class="bi bi-cpu-fill"></i></div>
+                <h5 class="mb-2">AI / ML</h5>
+                <a href="#" class="btn btn-dark btn-sm">Explore</a>
+              </div>
+
+              <div
+                class="domain-card flex-shrink-0 bg-danger text-white p-4 rounded shadow animate__animated animate__bounceIn text-center"
+                style="width: 220px;">
+                <div class="mb-2 fs-3"><i class="bi bi-shield-lock-fill"></i></div>
+                <h5 class="mb-2">Cyber Security</h5>
+                <a href="#" class="btn btn-light btn-sm">Explore</a>
+              </div>
+
+              <div
+                class="domain-card flex-shrink-0 bg-info text-white p-4 rounded shadow animate__animated animate__bounceIn text-center"
+                style="width: 220px;">
+                <div class="mb-2 fs-3"><i class="bi bi-cloud-fill"></i></div>
+                <h5 class="mb-2">Cloud Computing</h5>
+                <a href="#" class="btn btn-light btn-sm">Explore</a>
+              </div>
+
+              <div
+                class="domain-card flex-shrink-0 bg-secondary text-white p-4 rounded shadow animate__animated animate__bounceIn text-center"
+                style="width: 220px;">
+                <div class="mb-2 fs-3"><i class="bi bi-gear-fill"></i></div>
+                <h5 class="mb-2">DevOps</h5>
+                <a href="#" class="btn btn-light btn-sm">Explore</a>
+              </div>
+
+              <div
+                class="domain-card flex-shrink-0 bg-dark text-white p-4 rounded shadow animate__animated animate__bounceIn text-center"
+                style="width: 220px;">
+                <div class="mb-2 fs-3"><i class="bi bi-box-seam"></i></div>
+                <h5 class="mb-2">Blockchain</h5>
+                <a href="#" class="btn btn-light btn-sm">Explore</a>
+              </div>
+
+              <div
+                class="domain-card flex-shrink-0 bg-primary text-white p-4 rounded shadow animate__animated animate__bounceIn text-center"
+                style="width: 220px;">
+                <div class="mb-2 fs-3"><i class="bi bi-easel-fill"></i></div>
+                <h5 class="mb-2">UI/UX Design</h5>
+                <a href="#" class="btn btn-light btn-sm">Explore</a>
+              </div>
+
+              <div
+                class="domain-card flex-shrink-0 bg-success text-white p-4 rounded shadow animate__animated animate__bounceIn text-center"
+                style="width: 220px;">
+                <div class="mb-2 fs-3"><i class="bi bi-phone-fill"></i></div>
+                <h5 class="mb-2">Mobile Dev</h5>
+                <a href="#" class="btn btn-light btn-sm">Explore</a>
+              </div>
+              <div
+                class="domain-card flex-shrink-0 bg-warning text-white p-4 rounded shadow animate__animated animate__bounceIn text-center"
+                style="width: 220px;">
+                <div class="mb-2 fs-3"><i class="bi bi-controller"></i></div>
+                <h5 class="mb-2">Game Dev</h5>
+                <a href="#" class="btn btn-light btn-sm">Explore</a>
+              </div>
+
+              <div
+                class="domain-card flex-shrink-0 bg-secondary text-white p-4 rounded shadow animate__animated animate__bounceIn text-center"
+                style="width: 220px;">
+                <div class="mb-2 fs-3"><i class="bi bi-broadcast-pin"></i></div>
+                <h5 class="mb-2">IoT</h5>
+                <a href="#" class="btn btn-light btn-sm">Explore</a>
+              </div>
+
+              <div
+                class="domain-card flex-shrink-0 bg-light text-dark p-4 rounded shadow animate__animated animate__bounceIn text-center"
+                style="width: 220px;">
+                <div class="mb-2 fs-3"><i class="bi bi-robot"></i></div>
+                <h5 class="mb-2">Robotics</h5>
+                <a href="#" class="btn btn-dark btn-sm">Explore</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- CTA -->
+    <section class="cta">
+      <div class="container">
+        <h3>Begin your certified learning journey now!</h3>
+        <p>Login to continue or register if you're new.</p>
+        <!-- <a href="{% url 'login' %}" class="btn btn-light me-3">Login</a>
+      <a href="{% url 'register_developer' %}" class="btn btn-outline-light">Register</a> -->
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-center">
+      <div class="container">
+        <p class="mb-0">© 2025 Developer Portal • All Rights Reserved</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Developer Registration Modal -->
+  <div class="modal fade" id="devRegisterModal" tabindex="-1" aria-labelledby="devRegisterModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-dark text-white">
+        <div class="modal-header border-0">
+          <h5 class="modal-title">Register as Developer</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form method="POST" action="{% url 'register_developer' %}">
+          {% csrf_token %}
+          <div class="modal-body">
+            {{ dev_form.as_p }}
+          </div>
+          <div class="modal-footer border-0">
+            <button type="submit" class="btn btn-success w-100">Register</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- HR Registration Modal -->
+  <div class="modal fade" id="hrRegisterModal" tabindex="-1" aria-labelledby="hrRegisterModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-dark text-light">
+        <div class="modal-header border-0">
+          <h5 class="modal-title">Register as HR</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form method="POST" action="{% url 'register_hr' %}">
+          {% csrf_token %}
+          <div class="modal-body">
+            {{ hr_form.as_p }}
+
+          </div>
+          <div class="modal-footer border-0">
+            <button type="submit" class="btn btn-success w-100">Register</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <!-- Combined Login Modal -->
+  <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true"
+       data-open-login-modal="{% if open_login_modal %}true{% else %}false{% endif %}"
+       data-show-forgot-form="{% if show_forgot_form %}true{% else %}false{% endif %}"
+       data-show-reset-form="{% if show_reset_form %}true{% else %}false{% endif %}">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-dark text-white">
+        <div class="modal-header">
+          <h5 class="modal-title">Login</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Login Form -->
+          <div id="login-form-container">
+            <form method="POST" action="{% url 'custom_login' %}" id="login-form">
+              {% csrf_token %}
+              {{ login_form.as_p }}
+              <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary">Login</button>
+                <button type="button" class="btn btn-link text-light" id="show-forgot-password">Forgot Password?</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Forgot Password Form -->
+          <div id="forgot-password-container" style="display: none;">
+            <form method="POST" action="{% url 'password_reset_landing' %}">
+              {% csrf_token %}
+              <div class="mb-3">
+                <label for="id_email" class="form-label">Email address</label>
+                <input type="email" name="email" class="form-control" id="id_email" placeholder="Enter your email" required>
+              </div>
+              <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary">Send Password Reset Email</button>
+                <button type="button" class="btn btn-link text-light" id="back-to-login">Back to Login</button>
+              </div>
+            </form>
+            {% if email_sent %}
+            <div class="alert alert-success mt-3" role="alert">
+              If an account exists for that email, a reset link has been sent.
+            </div>
+            {% if reset_debug_link %}
+            <div class="alert alert-info mt-2" role="alert">
+              Dev shortcut: <a class="link-light" href="{{ reset_debug_link }}">Open reset form</a>
+            </div>
+            {% endif %}
+            {% endif %}
+          </div>
+
+          <!-- Reset Password Form (rendered from email link) -->
+          <div id="reset-password-container" style="display: none;">
+            {% if token_invalid %}
+              <div class="alert alert-danger" role="alert">
+                The reset link is invalid or has expired. Please request a new link.
+              </div>
+              <div class="d-grid gap-2">
+                <button type="button" class="btn btn-secondary" id="reset-back-to-forgot">Request New Link</button>
+              </div>
+            {% else %}
+              {% if reset_success %}
+                <div class="alert alert-success" role="alert">
+                  Your password has been reset successfully. Please login with your new password.
+                </div>
+                <div class="d-grid gap-2">
+                  <button type="button" class="btn btn-success" id="reset-back-to-login">Go to Login</button>
+                </div>
+              {% else %}
+                {% if errors %}
+                <div class="alert alert-danger" role="alert">
+                  <ul class="mb-0">
+                    {% for e in errors %}<li>{{ e }}</li>{% endfor %}
+                  </ul>
+                </div>
+                {% endif %}
+                <form method="POST" action="{% url 'password_reset_landing' %}">
+                  {% csrf_token %}
+                  <input type="hidden" name="uid" value="{{ uid }}">
+                  <input type="hidden" name="token" value="{{ token }}">
+                  <div class="mb-3">
+                    <label class="form-label" for="new_password1">New password</label>
+                    <input type="password" class="form-control" id="new_password1" name="new_password1" minlength="8" required>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label" for="new_password2">Confirm new password</label>
+                    <input type="password" class="form-control" id="new_password2" name="new_password2" minlength="8" required>
+                  </div>
+                  <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary">Reset Password</button>
+                    <button type="button" class="btn btn-link text-light" id="reset-cancel">Cancel</button>
+                  </div>
+                </form>
+              {% endif %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Optional Dark Mode Toggle -->
+  <div class="form-check form-switch text-light position-absolute top-0 start-0 m-3">
+    <input class="form-check-input" type="checkbox" id="themeSwitch">
+    <label class="form-check-label" for="themeSwitch">Dark Mode</label>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.getElementById('themeSwitch').addEventListener('change', function () {
+      document.documentElement.setAttribute('data-bs-theme', this.checked ? 'dark' : 'light');
+    });
+
+
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const input = document.getElementById('domain-input');
+      const result = document.getElementById('domain-result');
+
+      const availableDomains = [
+        "Web Development",
+        "Data Science",
+        "AI/ML",
+        "Cyber Security",
+        "Python",
+        "Java",
+        ".Net"
+        // Add more if needed
+      ];
+
+      input.addEventListener('input', function () {
+        const entered = this.value.trim();
+        if (!entered) {
+          result.textContent = '';
+          return;
+        }
+
+        if (availableDomains.map(d => d.toLowerCase()).includes(entered.toLowerCase())) {
+          result.innerHTML = `Courses available for <strong>${entered}</strong>!`;
+          result.classList.remove("text-danger");
+          result.classList.add("text-success");
+        } else {
+          result.innerHTML = `No courses found for <strong>${entered}</strong>.`;
+          result.classList.remove("text-success");
+          result.classList.add("text-danger");
+        }
+      });
+    });
+
+    const track = document.querySelector('.marquee-track');
+    setInterval(() => {
+      track.scrollLeft += 1;
+    }, 1); // adjust speed
+
+    // Password Reset Modal Logic
+    document.addEventListener('DOMContentLoaded', () => {
+      const loginModalEl = document.getElementById('loginModal');
+      const loginModal = new bootstrap.Modal(loginModalEl);
+
+      const loginContainer = document.getElementById('login-form-container');
+      const forgotContainer = document.getElementById('forgot-password-container');
+      const resetContainer = document.getElementById('reset-password-container');
+
+      const showForgotBtn = document.getElementById('show-forgot-password');
+      const backToLoginBtn = document.getElementById('back-to-login');
+      const resetBackToForgotBtn = document.getElementById('reset-back-to-forgot');
+      const resetBackToLoginBtn = document.getElementById('reset-back-to-login');
+      const resetCancelBtn = document.getElementById('reset-cancel');
+
+      function showView(view) {
+        loginContainer.style.display = (view === 'login') ? '' : 'none';
+        forgotContainer.style.display = (view === 'forgot') ? '' : 'none';
+        resetContainer.style.display = (view === 'reset') ? '' : 'none';
+      }
+
+      // Open modal automatically based on server flags (read from data-* attributes)
+      const flags = loginModalEl.dataset;
+      const openLoginModal = (flags.openLoginModal === 'true');
+      const showForgot = (flags.showForgotForm === 'true');
+      const showReset = (flags.showResetForm === 'true');
+
+      if (openLoginModal) {
+        loginModal.show();
+        if (showReset) {
+          showView('reset');
+        } else if (showForgot) {
+          showView('forgot');
+        } else {
+          showView('login');
+        }
+      }
+
+      // Wire up toggles
+      if (showForgotBtn) showForgotBtn.addEventListener('click', () => { showView('forgot'); });
+      if (backToLoginBtn) backToLoginBtn.addEventListener('click', () => { showView('login'); });
+      if (resetBackToForgotBtn) resetBackToForgotBtn.addEventListener('click', () => { showView('forgot'); });
+      if (resetBackToLoginBtn) resetBackToLoginBtn.addEventListener('click', () => { showView('login'); });
+      if (resetCancelBtn) resetCancelBtn.addEventListener('click', () => { showView('login'); });
+    });
+
+    // Initialize modern toasts
+    document.querySelectorAll('.modern-toast').forEach(function(toastEl) {
+      if (toastEl.classList.contains('show')) {
+        var toast = new bootstrap.Toast(toastEl, { 
+          delay: 6000,
+          autohide: true 
+        });
+        toast.show();
+        
+        // Add click handler for custom close button
+        const closeBtn = toastEl.querySelector('.toast-close');
+        if (closeBtn) {
+          closeBtn.addEventListener('click', function() {
+            toast.hide();
+          });
+        }
+      }
+    });
+
+    // Scroll to Top Button Logic
+    const scrollBtn = document.getElementById("scrollBtn");
+    window.onscroll = function () {
+      scrollBtn.style.display = (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) ? "block" : "none";
+    };
+    scrollBtn.addEventListener("click", function () {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Helper function to show toast messages
+    function showToast(message, type) {
+      const toastContainer = document.querySelector('[aria-live="polite"]');
+      if (!toastContainer) return;
+      
+      const toast = document.createElement('div');
+      toast.className = `modern-toast toast-${type} show mb-3 shadow-lg`;
+      toast.setAttribute('role', 'alert');
+      toast.setAttribute('aria-live', 'assertive');
+      toast.setAttribute('aria-atomic', 'true');
+      
+      let iconClass = 'bi-info-lg';
+      let iconCircleClass = 'info-icon';
+      
+      if (type === 'success') {
+        iconClass = 'bi-check-lg';
+        iconCircleClass = 'success-icon';
+      } else if (type === 'error' || type === 'danger') {
+        iconClass = 'bi-x-lg';
+        iconCircleClass = 'error-icon';
+      } else if (type === 'warning') {
+        iconClass = 'bi-exclamation-lg';
+        iconCircleClass = 'warning-icon';
+      }
+      
+      toast.innerHTML = `
+        <div class="toast-content">
+          <div class="toast-icon">
+            <div class="icon-circle ${iconCircleClass}">
+              <i class="bi ${iconClass}"></i>
+            </div>
+          </div>
+          <div class="toast-message">
+            <div class="message-text">${message}</div>
+          </div>
+          <button type="button" class="toast-close" aria-label="Close">
+            <i class="bi bi-x"></i>
+          </button>
+        </div>
+        <div class="toast-progress">
+          <div class="progress-bar toast-progress-${type}"></div>
+        </div>
+      `;
+      
+      toastContainer.appendChild(toast);
+      
+      // Auto-remove after 6 seconds
+      setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => {
+          toast.remove();
+        }, 300);
+      }, 6000);
+      
+      // Close button functionality
+      toast.querySelector('.toast-close').addEventListener('click', function() {
+        toast.classList.remove('show');
+        setTimeout(() => {
+          toast.remove();
+        }, 300);
+      });
+    }
+  </script>
+  <!-- Toast Container for notifications -->
+  <div aria-live="polite" aria-atomic="true" class="position-fixed top-0 end-0 p-3" style="z-index: 2000; min-width: 300px; max-width: 400px; pointer-events: none;">
+  </div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Modal toggle logic
+  const loginFormContainer = document.getElementById('login-form-container');
+  const forgotPasswordContainer = document.getElementById('forgot-password-container');
+  const showForgotPasswordBtn = document.getElementById('show-forgot-password');
+  const backToLoginBtn = document.getElementById('back-to-login');
+
+  if (showForgotPasswordBtn) {
+    showForgotPasswordBtn.addEventListener('click', function() {
+      if (loginFormContainer && forgotPasswordContainer) {
+        loginFormContainer.style.display = 'none';
+        forgotPasswordContainer.style.display = 'block';
+      }
+    });
+  }
+
+  if (backToLoginBtn) {
+    backToLoginBtn.addEventListener('click', function() {
+      if (loginFormContainer && forgotPasswordContainer) {
+        loginFormContainer.style.display = 'block';
+        forgotPasswordContainer.style.display = 'none';
+      }
+    });
+  }
+
+  // Helper function to show toast messages
+  function showToast(message, type) {
+    const toastContainer = document.querySelector('[aria-live="polite"]');
+    if (!toastContainer) return;
+
+    const toast = document.createElement('div');
+    toast.className = `modern-toast toast-${type} show mb-3 shadow-lg`;
+    toast.setAttribute('role', 'alert');
+    toast.setAttribute('aria-live', 'assertive');
+    toast.setAttribute('aria-atomic', 'true');
+
+    let iconClass = 'bi-info-lg';
+    let iconCircleClass = 'info-icon';
+
+    if (type === 'success') {
+      iconClass = 'bi-check-lg';
+      iconCircleClass = 'success-icon';
+    } else if (type === 'error' || type === 'danger') {
+      iconClass = 'bi-x-lg';
+      iconCircleClass = 'error-icon';
+    } else if (type === 'warning') {
+      iconClass = 'bi-exclamation-lg';
+      iconCircleClass = 'warning-icon';
+    }
+
+    toast.innerHTML = `
+      <div class="toast-content">
+        <div class="toast-icon">
+          <div class="icon-circle ${iconCircleClass}">
+            <i class="bi ${iconClass}"></i>
+          </div>
+        </div>
+        <div class="toast-message">
+          <div class="message-text">${message}</div>
+        </div>
+        <button type="button" class="toast-close" aria-label="Close">
+          <i class="bi bi-x"></i>
+        </button>
+      </div>
+      <div class="toast-progress">
+        <div class="progress-bar toast-progress-${type}"></div>
+      </div>
+    `;
+
+    toastContainer.appendChild(toast);
+
+    // Auto-remove after 6 seconds
+    setTimeout(() => {
+      toast.classList.remove('show');
+      setTimeout(() => {
+        toast.remove();
+      }, 300);
+    }, 6000);
+
+    // Close button functionality
+    toast.querySelector('.toast-close').addEventListener('click', function() {
+      toast.classList.remove('show');
+      setTimeout(() => {
+        toast.remove();
+      }, 300);
+    });
+  }
+});
+</script>
+</body>
+
+</html>

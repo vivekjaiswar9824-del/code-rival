@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>My Certificates | CodeRivals</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Bootstrap + FontAwesome -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .card-box {
+            border: none;
+            border-radius: 12px;
+            transition: 0.3s;
+            box-shadow: 0 0 0 transparent;
+        }
+
+        .card-box:hover {
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.07);
+            transform: translateY(-2px);
+        }
+
+        .certificate-card {
+            border: 1px solid #e9ecef;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+        }
+
+        .certificate-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-color: #0d6efd;
+        }
+
+        .certificate-header {
+            background: linear-gradient(135deg, #0d6efd, #0b5ed7);
+            color: white;
+            border-radius: 12px 12px 0 0;
+            padding: 1.5rem;
+        }
+
+        .certificate-body {
+            padding: 1.5rem;
+        }
+
+        .certificate-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 1rem;
+        }
+
+        .level-badge {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .sidebar {
+            width: 230px;
+            min-height: 100vh;
+            background: #fff;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 1.5rem 1rem;
+            transition: all 0.3s ease;
+            z-index: 999;
+        }
+
+        .sidebar.collapsed {
+            width: 60px;
+        }
+
+        .sidebar h5 {
+            transition: opacity 0.3s;
+        }
+
+        .sidebar.collapsed h5 {
+            opacity: 0;
+        }
+
+        .sidebar a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            color: #333;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .sidebar a i {
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .sidebar a span {
+            transition: opacity 0.3s;
+        }
+
+        .sidebar.collapsed a span {
+            opacity: 0;
+        }
+
+        .sidebar a.active,
+        .sidebar a:hover {
+            background-color: #e9f2ff;
+            color: #0d6efd;
+        }
+
+        .content {
+            margin-left: 230px;
+            padding: 2rem;
+            transition: margin-left 0.3s ease;
+        }
+
+        .collapsed~.content {
+            margin-left: 60px;
+        }
+
+        .topbar {
+            background-color: #fff;
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            position: fixed;
+            top: 0;
+            left: 230px;
+            right: 0;
+            z-index: 1000;
+            transition: left 0.3s ease;
+        }
+
+        .collapsed~.topbar {
+            left: 60px;
+        }
+
+        .topbar .profile-btn {
+            border: none;
+            background: transparent;
+            color: #333;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #6c757d;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                position: static;
+                min-height: auto;
+                box-shadow: none;
+            }
+
+            .sidebar.collapsed {
+                width: 100%;
+            }
+
+            .content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+
+            .topbar {
+                left: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <h5 class="text-primary fw-bold mb-4">CodeRivals</h5>
+        <a href="{% url 'developer_dashboard'%}"><i class="fa fa-gauge"></i><span>Dashboard</span></a>
+        <a href="{% url 'enroll_courses'%}"><i class="fa fa-book"></i><span>Courses</span></a>
+        <a href="{% url 'attempt-test'%}"><i class="fa fa-file-lines"></i><span>Tests</span></a>
+        <a href="{% url 'test-history'%}"><i class="fa fa-chart-line"></i><span>Test History</span></a>
+        <a href="{% url 'developer_certificates'%}" class="active"><i class="fa fa-certificate"></i><span>Certificates</span></a>
+   
+    </div>
+
+    <!-- Topbar -->
+    <div class="topbar d-flex justify-content-between align-items-center" id="topbar">
+        <div class="d-flex align-items-center gap-3">
+            <button class="btn btn-sm btn-outline-primary" id="toggleSidebarBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <h5 class="mb-0" id="welcomeText">My Certificates</h5>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+            <a href="#" class="btn btn-outline-primary btn-sm"><i class="fa fa-bell"></i></a>
+            <div class="dropdown">
+                <button class="profile-btn dropdown-toggle" type="button" id="profileDropdown" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    <i class="fas fa-user-circle fs-5"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#viewProfileModal"><i
+                                class="fas fa-user me-2"></i>View Profile</a></li>
+                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#resetPasswordModal"><i
+                                class="fas fa-key me-2"></i>Reset Password</a></li>
+                    <li>
+                        <hr class="dropdown-divider" />
+                    </li>
+                    <li><a class="dropdown-item text-danger" href="/logout"><i
+                                class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content mt-5 pt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold mb-2">My Certificates</h2>
+                <p class="text-muted mb-0">Your earned certifications and achievements</p>
+            </div>
+            <div class="text-end">
+                <h4 class="text-primary mb-1">{{ certificates.count }}</h4>
+                <small class="text-muted">Total Certificates</small>
+            </div>
+        </div>
+
+        {% if certificates %}
+        <div class="row g-4">
+            {% for certificate in certificates %}
+            <div class="col-lg-6 col-xl-4">
+                <div class="certificate-card">
+                    <div class="certificate-header">
+                        <div class="certificate-icon">
+                            <i class="fas fa-certificate"></i>
+                        </div>
+                        <h5 class="mb-2">{{ certificate.course.title }}</h5>
+                        <span class="level-badge">{{ certificate.level }}</span>
+                    </div>
+                    <div class="certificate-body">
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <small class="text-muted d-block">Course</small>
+                                <strong>{{ certificate.course.title }}</strong>
+                            </div>
+                            <div class="col-6">
+                                <small class="text-muted d-block">Domain</small>
+                                <strong>{{ certificate.course.domain }}</strong>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <small class="text-muted d-block">Level</small>
+                                <strong>{{ certificate.level }}</strong>
+                            </div>
+                            <div class="col-6">
+                                <small class="text-muted d-block">Issued</small>
+                                <strong>{{ certificate.issued_at|date:"M j, Y" }}</strong>
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2">
+                            {% if certificate.certificate_file and certificate.certificate_file != '' %}
+                            <a href="{% url 'view_certificate' certificate.id %}" class="btn btn-outline-primary" target="_blank">
+                                <i class="fas fa-eye me-2"></i>View Certificate
+                            </a>
+                            <a href="{% url 'download_certificate' certificate.id %}" class="btn btn-primary">
+                                <i class="fas fa-download me-2"></i>Download Certificate
+                            </a>
+                            {% else %}
+                            <button class="btn btn-outline-primary" disabled>
+                                <i class="fas fa-clock me-2"></i>Certificate Generating...
+                            </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-certificate"></i>
+            <h4 class="mb-3">No Certificates Yet</h4>
+            <p class="mb-4">You haven't earned any certificates yet. Complete tests to start earning your certifications!</p>
+            <a href="{% url 'attempt-test' %}" class="btn btn-primary">
+                <i class="fas fa-play me-2"></i>Start Taking Tests
+            </a>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Bootstrap JS + Toggle Script -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const topbar = document.getElementById('topbar');
+        const content = document.querySelector('.content');
+        const toggleBtn = document.getElementById('toggleSidebarBtn');
+        const welcomeText = document.getElementById('welcomeText');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('collapsed');
+            topbar.classList.toggle('collapsed');
+        }
+
+        toggleBtn.addEventListener('click', toggleSidebar);
+        welcomeText.addEventListener('click', toggleSidebar);
+    </script>
+</body>
+
+</html> 
